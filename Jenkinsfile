@@ -24,6 +24,7 @@ pipeline {
        stage('Setup') {
            steps {
                 sh '''
+                    docker --version && docker compose version
                     docker system df
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} pull --quiet
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
@@ -33,7 +34,6 @@ pipeline {
        }
        stage('Integration Test') {
            steps {
-                sh 'docker --version && docker compose version'
                 sh '''
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
                        -Dspring.profiles.active=compose-ci \
