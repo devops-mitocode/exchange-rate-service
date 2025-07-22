@@ -32,15 +32,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Testcontainers
 public class ExchangeRateServiceTestContainers {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeRateServiceTestContainers.class);
-//    private static final String DEFAULT_BUILD_TAG = "default_build_tag";
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
     private static final String DATABASE_USER = "petclinic";
     private static final String DATABASE_PASSWORD = "petclinic";
-
-    private static final String NETWORK_ALIAS = "db";
-    private static final String CONTAINER_SUFFIX = "-db-1";
 
     @Autowired
     private ExchangeRateService exchangeRateService;
@@ -53,21 +48,10 @@ public class ExchangeRateServiceTestContainers {
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
-//            .withNetworkMode(networkName)
-//            .withCreateContainerCmdModifier(cmd -> {
-//                cmd.withName(containerName);
-//                cmd.withAliases(NETWORK_ALIAS);
-//            })
             .withFileSystemBind("src/main/resources/schema.sql",
                     "/docker-entrypoint-initdb.d/01-schema.sql", BindMode.READ_ONLY)
             .withFileSystemBind("src/main/resources/data.sql",
                     "/docker-entrypoint-initdb.d/02-data.sql", BindMode.READ_ONLY)
-//            .waitingFor(new WaitAllStrategy()
-//                    .withStartupTimeout(Duration.ofMinutes(3))
-//                    .withStrategy(Wait.forListeningPort())
-//                    .withStrategy(Wait.forLogMessage(".*database system is ready to accept connections.*\\n", 1))
-//                    .withStrategy(Wait.forSuccessfulCommand("pg_isready -U petclinic"))
-//            )
             .withStartupTimeout(Duration.ofMinutes(3));
 
     @Container
