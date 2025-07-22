@@ -1,0 +1,16 @@
+FROM maven:3.9.6-eclipse-temurin-17
+
+ENV COMPOSE_VERSION=2.38.2
+ENV USERNAME=ciuser
+
+# Crear usuario no root y asignar grupo docker
+RUN useradd -m ${USERNAME} && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends curl docker.io && \
+    curl -SL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose && \
+    usermod -aG docker ${USERNAME} && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}/app
