@@ -29,8 +29,7 @@ pipeline {
                     docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} ps
 
                     docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} exec -T maven mvn clean verify \
-                        -Dspring.docker.compose.enabled=false \
-                        -DMATHJS_API_URL=http://wiremock:8080/v4/ \
+                        -Dspring.profiles.active=compose-ci \
                         -Dstyle.color=always \
                         -B -ntp
                 '''

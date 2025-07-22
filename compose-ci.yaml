@@ -1,8 +1,6 @@
 services:
   maven:
     image: maven:3.9.6-eclipse-temurin-17
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/exchange_rate_db
     command: cat
     tty: true
     volumes:
