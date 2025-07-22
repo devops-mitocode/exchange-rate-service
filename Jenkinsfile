@@ -23,10 +23,11 @@ pipeline {
     stages {
        stage('Setup') {
            steps {
-               sh '''
-                   docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
-                   docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
-               '''
+                sh '''
+                    docker system df
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
+                '''
            }
        }
        stage('Integration Test') {
