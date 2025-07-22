@@ -1,0 +1,36 @@
+services:
+  maven:
+    image: maven:3.9.6-eclipse-temurin-17
+    command: cat
+    tty: true
+    volumes:
+      - ${WORKSPACE}:${WORKSPACE}
+    working_dir: ${WORKSPACE}
+    depends_on:
+      db:
+        condition: service_healthy
+      wiremock:
+        condition: service_started
+
+  db:
+    image: postgres:16.9
+    environment:
+      POSTGRES_DB: exchange_rate_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d exchange_rate_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 10s
+    tmpfs:
+      - /var/lib/postgresql/data
+
+  wiremock:
+    image: wiremock/wiremock:3.13.1
+    volumes:
+      - ./src/main/resources/wiremock/mappings:/home/wiremock/mappings
