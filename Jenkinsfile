@@ -24,9 +24,6 @@ pipeline {
        stage('Setup') {
            steps {
                sh '''
-                   echo "Starting tests for: ${PROJECT_NAME}"
-                   echo "Starting tests for: ${WORKSPACE}"
-
                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
                '''
@@ -46,7 +43,7 @@ pipeline {
         stage('Cleanup') {
             steps {
                 sh '''
-                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes --remove-orphans
                     docker system df
                 '''
                 cleanWs()
