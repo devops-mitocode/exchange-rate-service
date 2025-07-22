@@ -14,7 +14,8 @@ RUN groupadd -g ${GID} ${USERNAME} && \
     curl -SL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 \
          -o /usr/libexec/docker/cli-plugins/docker-compose && \
     chmod +x /usr/libexec/docker/cli-plugins/docker-compose && \
-    ln -s /usr/libexec/docker/cli-plugins /root/.docker/cli-plugins && \
+    mkdir -p /root/.docker/cli-plugins && \
+    ln -s /usr/libexec/docker/cli-plugins/docker-compose /root/.docker/cli-plugins/docker-compose && \
     usermod -aG docker ${USERNAME} && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
