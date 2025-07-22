@@ -44,6 +44,7 @@ pipeline {
             steps {
                 sh '''
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes --remove-orphans
+                    docker builder prune -af
                     docker system df
                 '''
                 cleanWs()
