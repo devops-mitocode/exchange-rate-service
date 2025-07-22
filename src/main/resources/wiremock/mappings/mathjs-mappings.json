@@ -1,0 +1,40 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/v4/",
+        "queryParameters": {
+          "expr": {
+            "equalTo": "100.00*3.60"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html; charset=utf-8"
+        },
+        "body": "360"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/v4/",
+        "queryParameters": {
+          "expr": {
+            "equalTo": "10.00*3.60"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html; charset=utf-8"
+        },
+        "body": "36"
+      }
+    }
+  ]
+}
