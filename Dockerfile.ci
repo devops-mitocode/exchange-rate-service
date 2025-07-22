@@ -1,7 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-17
 
 ENV COMPOSE_VERSION=2.38.2
-ENV USERNAME=ciuser
+ENV USERNAME=jenkins
 
 # Crear usuario no root y asignar grupo docker
 RUN useradd -m ${USERNAME} && \
