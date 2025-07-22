@@ -1,14 +1,15 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'Dockerfile.ci'
-            dir '.'
-            args '''
-                -v /var/run/docker.sock:/var/run/docker.sock
-                -u root:root
-            '''
-        }
-    }
+    agent any
+//     agent {
+//         dockerfile {
+//             filename 'Dockerfile.ci'
+//             dir '.'
+//             args '''
+//                 -v /var/run/docker.sock:/var/run/docker.sock
+//                 -u root:root
+//             '''
+//         }
+//     }
     options {
        timeout(time: 10, unit: 'MINUTES')
        ansiColor('xterm')
