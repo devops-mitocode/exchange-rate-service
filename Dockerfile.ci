@@ -2,9 +2,12 @@ FROM maven:3.9.6-eclipse-temurin-17
 
 ENV COMPOSE_VERSION=2.38.2
 ENV USERNAME=jenkins
+ENV UID=115
+ENV GID=122
 
-# Crear usuario no root y asignar grupo docker
-RUN useradd -m ${USERNAME} && \
+# Crear usuario jenkins con el mismo UID:GID que Jenkins host
+RUN groupadd -g ${GID} ${USERNAME} && \
+    useradd -u ${UID} -g ${GID} -m -s /bin/bash ${USERNAME} && \
     apt-get update && \
     apt-get install -y --no-install-recommends curl docker.io && \
     curl -SL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && \
