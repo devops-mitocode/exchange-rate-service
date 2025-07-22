@@ -25,6 +25,7 @@ pipeline {
            steps {
                 sh '''
                     docker system df
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} pull --quiet
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
                 '''
