@@ -30,9 +30,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
-public class ExchangeRateServiceTestContainersIT {
+public class ExchangeRateServiceTestContainers {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeRateServiceTestContainersIT.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeRateServiceTestContainers.class);
 //    private static final String DEFAULT_BUILD_TAG = "default_build_tag";
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
