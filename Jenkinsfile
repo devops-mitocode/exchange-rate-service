@@ -17,23 +17,40 @@ pipeline {
    // triggers {
    //     cron('H/5 * * * *')
    // }
+    environment {
+        PROJECT_NAME = "${BUILD_TAG}"
+    }
     stages {
+       stage('Setup') {
+           steps {
+               sh '''
+                   echo "Starting tests for: ${PROJECT_NAME}"
+                   echo "Starting tests for: ${WORKSPACE}"
+
+                   docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
+                   docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
+               '''
+           }
+       }
        stage('Integration Test') {
            steps {
                 sh 'docker --version && docker compose version'
                 sh '''
-                    export WORKSPACE=${WORKSPACE}
-                    export BUILD_TAG=${BUILD_TAG}
-
-                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} up -d
-                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} ps
-
-                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} exec -T maven mvn clean verify \
-                        -Dspring.profiles.active=compose-ci \
-                        -Dstyle.color=always \
-                        -B -ntp
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
+                       -Dspring.profiles.active=compose-ci \
+                       -Dstyle.color=always \
+                       -B -ntp
                 '''
            }
        }
+        stage('Cleanup') {
+            steps {
+                sh '''
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes
+                    docker system df
+                '''
+                cleanWs()
+            }
+        }
     }
 }
