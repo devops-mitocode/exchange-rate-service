@@ -25,26 +25,17 @@ pipeline {
 //                 sh 'mvn clean verify -Dspring.profiles.active=compose -Dstyle.color=always -B -ntp'
 //                 sh 'mvn clean verify -Dspring.profiles.active=compose -Dspring.docker.compose.file=compose-ci.yaml -DBUILD_TAG=abc -B -ntp'
                 sh '''
-                   echo "Ejecutando tests para: ${BUILD_TAG}"
-                   echo "Workspace: ${WORKSPACE}"
+                    export WORKSPACE=${WORKSPACE}
+                    export BUILD_TAG=${BUILD_TAG}
 
-                   # Levantar el stack completo (incluyendo Maven)
-                   export WORKSPACE=${WORKSPACE}
-                   export BUILD_TAG=${BUILD_TAG}
+                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} up -d
+                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} ps
 
-                   env | sort
-
-                   docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} up -d
-
-                   # Verificar que servicios estén arriba
-                   echo "Estado de servicios:"
-                   docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} ps
-
-                   # Ejecutar Maven DENTRO del contenedor maven
-                   docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} exec -T maven mvn clean verify \
-                       -Dspring.docker.compose.enabled=false \
-                       -Dstyle.color=always \
-                       -B -ntp
+                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} exec -T maven mvn clean verify \
+                        -Dspring.docker.compose.enabled=false \
+                        -DMATHJS_API_URL=http://wiremock:8080/v4/ \
+                        -Dstyle.color=always \
+                        -B -ntp
                 '''
            }
        }
