@@ -55,7 +55,7 @@ pipeline {
                     docker builder prune -af
                     docker system df
                 '''
-//                 cleanWs()
+                cleanWs()
             }
         }
     }
