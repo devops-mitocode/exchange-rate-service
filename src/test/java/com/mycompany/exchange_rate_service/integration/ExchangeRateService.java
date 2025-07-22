@@ -26,7 +26,6 @@ public class ExchangeRateService {
     private TestRestTemplate restTemplate;
 
     @Test
-    @Disabled
     void calcular_TipoCambio_Service() {
         // Arrange
         String fromCurrency = "USD";
@@ -53,7 +52,6 @@ public class ExchangeRateService {
     }
 
     @Test
-    @Disabled
     void calcular_TipoCambio_Controller() {
         // Arrange
         String fromCurrency = "USD";
