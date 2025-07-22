@@ -42,6 +42,11 @@ pipeline {
                        -B -ntp
                 '''
            }
+           post {
+               always {
+                   junit 'target/failsafe-reports/*.xml'
+               }
+           }
        }
         stage('Cleanup') {
             steps {
