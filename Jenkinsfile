@@ -42,7 +42,7 @@ pipeline {
 
                    # Ejecutar Maven DENTRO del contenedor maven
                    docker compose -f compose-ci.yaml --project-name=${BUILD_TAG} exec -T maven mvn clean verify \
-                       -Dspring.profiles.active=compose \
+                       -Dspring.docker.compose.enabled=false \
                        -Dstyle.color=always \
                        -B -ntp
                 '''
