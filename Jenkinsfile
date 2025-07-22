@@ -37,7 +37,7 @@ pipeline {
                 sh '''
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
                        -Dspring.profiles.active=compose-ci \
-                       -Dit.test=ExchangeRateService \
+                       -Dit.test=ExchangeRateServiceCompose \
                        -Dstyle.color=always \
                        -B -ntp
                 '''
