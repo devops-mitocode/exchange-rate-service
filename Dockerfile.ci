@@ -1,23 +1,17 @@
 FROM maven:3.9.6-eclipse-temurin-17
 
 ENV COMPOSE_VERSION=2.38.2
-ENV USERNAME=jenkins
-ENV UID=115
-ENV GID=122
 
-# Crear usuario jenkins con el mismo UID:GID que Jenkins host
-RUN groupadd -g ${GID} ${USERNAME} && \
-    useradd -u ${UID} -g ${GID} -m -s /bin/bash ${USERNAME} && \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends curl docker.io && \
     mkdir -p /usr/libexec/docker/cli-plugins && \
     curl -SL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 \
          -o /usr/libexec/docker/cli-plugins/docker-compose && \
     chmod +x /usr/libexec/docker/cli-plugins/docker-compose && \
-    mkdir -p /root/.docker/cli-plugins && \
-    ln -s /usr/libexec/docker/cli-plugins/docker-compose /root/.docker/cli-plugins/docker-compose && \
-    usermod -aG docker ${USERNAME} && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-USER ${USERNAME}
-WORKDIR /home/${USERNAME}/app
+# Crear usuario pero permitir sudo sin password para docker
+RUN useradd -m jenkins && \
+    echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/docker*" >> /etc/sudoers
+
+WORKDIR /app
