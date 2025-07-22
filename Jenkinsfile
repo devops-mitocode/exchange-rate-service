@@ -20,10 +20,7 @@ pipeline {
     stages {
        stage('Integration Test') {
            steps {
-                sh 'whoami'
                 sh 'docker --version && docker compose version'
-//                 sh 'mvn clean verify -Dspring.profiles.active=compose -Dstyle.color=always -B -ntp'
-//                 sh 'mvn clean verify -Dspring.profiles.active=compose -Dspring.docker.compose.file=compose-ci.yaml -DBUILD_TAG=abc -B -ntp'
                 sh '''
                     export WORKSPACE=${WORKSPACE}
                     export BUILD_TAG=${BUILD_TAG}
