@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Testcontainers
 public class ExchangeRateServiceTestContainers {
 
+    @Value("${TESTCONTAINERS_NETWORK_NAME:}")
+    private String networkName;
+
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
     private static final String DATABASE_USER = "petclinic";
@@ -45,7 +49,7 @@ public class ExchangeRateServiceTestContainers {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withNetworkMode("jenkins-exchange-rate-service-testcontainers-9_default")
+//            .withNetworkMode(networkName)
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
@@ -58,7 +62,7 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
-            .withNetworkMode("jenkins-exchange-rate-service-testcontainers-9_default")
+//            .withNetworkMode(networkName)
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)

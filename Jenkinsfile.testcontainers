@@ -9,11 +9,13 @@ pipeline {
    // }
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
+        TESTCONTAINERS_NETWORK_NAME = "${BUILD_TAG}_default"
     }
     stages {
        stage('Setup') {
            steps {
                 sh '''
+                    env | sort
                     docker --version && docker compose version
                     docker system df
                     docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} pull --quiet
@@ -28,7 +30,6 @@ pipeline {
            steps {
                 sh '''
                     docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
-
                         -Dit.test=ExchangeRateServiceTestContainers \
                         -Dstyle.color=always \
                         -B -ntp
