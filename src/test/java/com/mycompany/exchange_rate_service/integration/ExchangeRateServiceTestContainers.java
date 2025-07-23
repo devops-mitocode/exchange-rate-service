@@ -43,6 +43,7 @@ public class ExchangeRateServiceTestContainers {
 //            .build();
 
     private static final String POSTGRES_IMAGE = "postgres:16.9";
+    private static final String WIREMOCK_IMAGE = "wiremock/wiremock:3.13.1";
     private static final String DATABASE_NAME = "exchange_rate_db";
     private static final String DATABASE_USER = "postgres";
     private static final String DATABASE_PASSWORD = "postgres";
@@ -53,17 +54,17 @@ public class ExchangeRateServiceTestContainers {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    static Network jenkinsNetwork = Network.builder()
-            .createNetworkCmdModifier(cmd -> cmd.withName(System.getenv("CUSTOM_NETWORK")))
-            .build();
+//    static Network jenkinsNetwork = Network.builder()
+//            .createNetworkCmdModifier(cmd -> cmd.withName(System.getenv("CUSTOM_NETWORK")))
+//            .build();
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
 //            .withNetwork(jenkinsNetwork)
 //            .withNetworkAliases("postgres")
-            .withDatabaseName(DATABASE_NAME)
-            .withUsername(DATABASE_USER)
-            .withPassword(DATABASE_PASSWORD)
+//            .withDatabaseName(DATABASE_NAME)
+//            .withUsername(DATABASE_USER)
+//            .withPassword(DATABASE_PASSWORD)
             .withFileSystemBind("src/main/resources/schema.sql",
                     "/docker-entrypoint-initdb.d/01-schema.sql", BindMode.READ_ONLY)
             .withFileSystemBind("src/main/resources/data.sql",
@@ -72,7 +73,7 @@ public class ExchangeRateServiceTestContainers {
 
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
-            DockerImageName.parse("wiremock/wiremock:3.13.1"))
+            DockerImageName.parse(WIREMOCK_IMAGE))
 //            .withNetwork(jenkinsNetwork)
 //            .withNetworkAliases("wiremock")
             .withFileSystemBind("src/main/resources/wiremock/mappings",
