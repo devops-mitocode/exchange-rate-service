@@ -17,9 +17,9 @@ pipeline {
    //     cron('H/5 * * * *')
    // }
     environment {
-        CUSTOM_NETWORK = "${BUILD_TAG}_default"
-        DOCKER_HOST = "unix:///var/run/docker.sock"
-        TESTCONTAINERS_RYUK_DISABLED = false
+    //    CUSTOM_NETWORK = "${BUILD_TAG}_default"
+    //    DOCKER_HOST = "unix:///var/run/docker.sock"
+        TESTCONTAINERS_RYUK_DISABLED = true
     }
     stages {
        stage('Integration Test') {
