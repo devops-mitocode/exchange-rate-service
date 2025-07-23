@@ -18,7 +18,7 @@ pipeline {
    // }
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
-        CUSTOM_NETWORK = "${BUILD_TAG}_network"
+        CUSTOM_NETWORK = "${BUILD_TAG}_default"
         TESTCONTAINERS_NETWORK_NAME = "${BUILD_TAG}_default"
         DOCKER_HOST = "unix:///var/run/docker.sock"
         TESTCONTAINERS_RYUK_DISABLED = true
