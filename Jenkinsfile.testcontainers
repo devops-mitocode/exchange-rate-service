@@ -6,6 +6,7 @@ pipeline {
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -u root:root
+                --network ${CUSTOM_NETWORK}
             '''
         }
     }
@@ -27,9 +28,7 @@ pipeline {
        stage('Integration Test') {
            steps {
                 sh '''
-                    docker network create ${CUSTOM_NETWORK}
-
-                    docker network connect ${CUSTOM_NETWORK} $(hostname)
+                    
 
                     docker network ls
                 '''
