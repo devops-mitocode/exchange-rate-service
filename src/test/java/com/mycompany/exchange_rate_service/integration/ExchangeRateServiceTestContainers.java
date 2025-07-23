@@ -200,7 +200,6 @@ public class ExchangeRateServiceTestContainers {
     }
 
     @Test
-    @Disabled
     void calcular_TipoCambio_Controller() {
         // Arrange
         String fromCurrency = "USD";
