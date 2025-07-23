@@ -38,6 +38,8 @@ pipeline {
                 sh '''
                     env | sort
 
+                    docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
+
                     mvn clean verify \
                         -Dit.test=ExchangeRateServiceTestContainers \
                         -Dstyle.color=always \
