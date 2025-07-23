@@ -82,7 +82,7 @@ public class ExchangeRateServiceTestContainers {
         registry.add("spring.datasource.password", postgres::getPassword);
 
         registry.add("mathjs.api.url", () ->
-                "http://wiremock:" + wireMockContainer.getMappedPort(8080) + "/v4/");
+                "http://localhost:" + wireMockContainer.getMappedPort(8080) + "/v4/");
     }
 
     private static String resolveNetworkName() {
