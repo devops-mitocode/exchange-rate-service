@@ -76,7 +76,7 @@ public class ExchangeRateServiceTestContainers {
             .withExposedPorts(8080)
             .withCommand("--global-response-templating", "--verbose")
             .withStartupTimeout(Duration.ofMinutes(2))
-            .waitingFor(Wait.forHttp("/v4/").forStatusCode(200).withStartupTimeout(Duration.ofMinutes(2)));
+            .waitingFor(Wait.forHttp("/v4/?expr=100.00*3.60").forStatusCode(200).withStartupTimeout(Duration.ofMinutes(2)));
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
