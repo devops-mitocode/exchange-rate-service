@@ -41,7 +41,7 @@ pipeline {
                         -Dspring.profiles.active=test \
                         -Dit.test=ExchangeRateServiceTestContainers \
                         -Dstyle.color=always \
-                        -B -ntp
+                        -B -ntp -X
                 '''
            }
        }
