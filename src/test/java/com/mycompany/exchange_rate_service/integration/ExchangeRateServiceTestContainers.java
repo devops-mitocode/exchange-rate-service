@@ -35,7 +35,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
-@Import(TestcontainersConfiguration.class)
+//@Import(TestcontainersConfiguration.class)
 public class ExchangeRateServiceTestContainers {
 
     private static final Logger logger = LoggerFactory.getLogger(ExchangeRateServiceTestContainers.class);
