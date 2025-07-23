@@ -18,24 +18,21 @@ pipeline {
    // }
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
+        CUSTOM_NETWORK = "${BUILD_TAG}_network"
         TESTCONTAINERS_NETWORK_NAME = "${BUILD_TAG}_default"
     }
     stages {
        stage('Integration Test') {
            steps {
 
-                sh 'env | sort'
+                docker network create ${CUSTOM_NETWORK}
+
+                docker network connect ${CUSTOM_NETWORK} $(hostname)
+
+                docker network ls
 
                 script {
-                    def networkName = sh(
-                    script: '''
-                        CONTAINER_ID=$(hostname)
-                        docker inspect $CONTAINER_ID --format='{{range $net, $conf := .NetworkSettings.Networks}}{{$net}}{{end}}'
-                    ''',
-                    returnStdout: true
-                    ).trim()
-
-                    env.TESTCONTAINERS_NETWORK_NAME = networkName
+                    env.TESTCONTAINERS_NETWORK_NAME = env.CUSTOM_NETWORK
                 }
 
                 sh '''
