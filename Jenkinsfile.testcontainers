@@ -27,12 +27,7 @@ pipeline {
        stage('Integration Test') {
 
            steps {
-                sh '''
-                    docker network ls
-                    docker network create ${CUSTOM_NETWORK}
-                    docker network disconnect bridge $(hostname)
-                    docker network connect ${CUSTOM_NETWORK} $(hostname)
-                '''
+
 
                 sh '''
                     env | sort

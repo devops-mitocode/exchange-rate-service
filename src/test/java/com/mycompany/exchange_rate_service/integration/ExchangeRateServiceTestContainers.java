@@ -59,8 +59,8 @@ public class ExchangeRateServiceTestContainers {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withNetwork(jenkinsNetwork)
-            .withNetworkAliases("postgres")
+//            .withNetwork(jenkinsNetwork)
+//            .withNetworkAliases("postgres")
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
@@ -73,8 +73,8 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
-            .withNetwork(jenkinsNetwork)
-            .withNetworkAliases("wiremock")
+//            .withNetwork(jenkinsNetwork)
+//            .withNetworkAliases("wiremock")
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)
@@ -90,7 +90,7 @@ public class ExchangeRateServiceTestContainers {
         registry.add("spring.datasource.password", postgres::getPassword);
 
         registry.add("mathjs.api.url", () ->
-                "http://wiremock:" + wireMockContainer.getMappedPort(8080) + "/v4/");
+                "http://"+ wireMockContainer.getHost() + ":" + wireMockContainer.getMappedPort(8080) + "/v4/");
     }
 
 //    @Container
