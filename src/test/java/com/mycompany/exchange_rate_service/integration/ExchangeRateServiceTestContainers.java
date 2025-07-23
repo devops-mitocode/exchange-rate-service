@@ -15,15 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.BindMode;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.*;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
@@ -91,9 +89,12 @@ public class ExchangeRateServiceTestContainers {
                 "http://localhost:" + wireMockContainer.getMappedPort(8080) + "/v4/");
     }
 
-    private static String resolveNetworkName() {
-        return System.getenv("TESTCONTAINERS_NETWORK_NAME");
-    }
+//    @Container
+//    static ComposeContainer environment = new ComposeContainer(new File("docker-compose.test.yml"))
+//            .withExposedService("postgres", 5432)
+//            .withExposedService("wiremock", 8080)
+//            .withStartupTimeout(Duration.ofMinutes(5));
+
 
     @Test
     void verificar_configuracion_wiremock() throws InterruptedException {
