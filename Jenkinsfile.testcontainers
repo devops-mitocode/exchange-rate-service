@@ -1,7 +1,14 @@
 pipeline {
-    agent none
-    environment {
-        CUSTOM_NETWORK = "${BUILD_TAG}_default"
+    agent {
+        dockerfile {
+            filename 'Dockerfile.testcontainers'
+            dir '.'
+            args '''
+                -v /var/run/docker.sock:/var/run/docker.sock
+                -u root:root
+                --network ${CUSTOM_NETWORK}
+            '''
+        }
     }
     options {
        timeout(time: 10, unit: 'MINUTES')
@@ -18,25 +25,22 @@ pipeline {
         DOCKER_HOST = "unix:///var/run/docker.sock"
         TESTCONTAINERS_RYUK_DISABLED = true
     }
-    */
+
     stages {
        stage('Integration Test') {
-            agent {
-                dockerfile {
-                    filename 'Dockerfile.testcontainers'
-                    dir '.'
-                    args '''
-                        -v /var/run/docker.sock:/var/run/docker.sock
-                        -u root:root
-                        --network ${CUSTOM_NETWORK}
-                    '''
-                }
-            }
+
            steps {
                 sh '''
 
 
                     docker network ls
+
+                    # Crear red personalizada
+                    docker network create ${CUSTOM_NETWORK}
+
+                    # Desconectar de bridge y conectar a la red personalizada
+                    docker network disconnect bridge $(hostname)
+                    docker network connect ${CUSTOM_NETWORK} $(hostname)
                 '''
 
                 sh '''
