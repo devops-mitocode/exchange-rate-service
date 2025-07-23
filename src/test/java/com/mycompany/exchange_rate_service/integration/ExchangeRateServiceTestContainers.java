@@ -19,6 +19,7 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -73,7 +74,9 @@ public class ExchangeRateServiceTestContainers {
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)
-            .withCommand("--global-response-templating", "--verbose");
+            .withCommand("--global-response-templating", "--verbose")
+            .withStartupTimeout(Duration.ofMinutes(2))
+            .waitingFor(Wait.forHttp("/v4/").forStatusCode(200).withStartupTimeout(Duration.ofMinutes(2)));
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
