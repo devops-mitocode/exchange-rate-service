@@ -1,0 +1,17 @@
+FROM maven:3.9.6-eclipse-temurin-17
+
+ENV COMPOSE_VERSION=2.38.2
+
+RUN apt-get update && \
+   apt-get install -y --no-install-recommends curl docker.io && \
+   mkdir -p /usr/libexec/docker/cli-plugins && \
+   curl -SL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 \
+        -o /usr/libexec/docker/cli-plugins/docker-compose && \
+   chmod +x /usr/libexec/docker/cli-plugins/docker-compose && \
+   apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Crear usuario pero permitir sudo sin password para docker
+RUN useradd -m jenkins && \
+   echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/docker*" >> /etc/sudoers
+
+WORKDIR /app
