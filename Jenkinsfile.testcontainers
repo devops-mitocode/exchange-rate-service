@@ -16,23 +16,23 @@ pipeline {
                 sh '''
                     docker --version && docker compose version
                     docker system df
-                    docker compose -f compose-testcontainer.yaml --project-name ${PROJECT_NAME} pull --quiet
-                    docker compose -f compose-testcontainer.yaml --project-name ${PROJECT_NAME} up -d
-                    docker compose -f compose-testcontainer.yaml --project-name ${PROJECT_NAME} ps
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} pull --quiet
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} up -d
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} ps
                 '''
            }
        }
        stage('Integration Test') {
            steps {
                 sh '''
-                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} exec -T maven mvn --version
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} exec -T maven mvn --version
                 '''
            }
        }
         stage('Cleanup') {
             steps {
                 sh '''
-                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes --remove-orphans
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes --remove-orphans
                     docker builder prune -af
                     docker system df
                 '''
