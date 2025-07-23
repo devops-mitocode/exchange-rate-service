@@ -19,6 +19,8 @@ pipeline {
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} pull --quiet
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
+
+                    docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
                 '''
            }
        }
