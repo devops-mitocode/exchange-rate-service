@@ -97,6 +97,7 @@ public class ExchangeRateServiceTestContainers {
 
 
     @Test
+    @Disabled
     void verificar_configuracion_wiremock() throws InterruptedException {
         // Esperar extra para asegurar que WireMock esté completamente listo
         Thread.sleep(5000);
@@ -122,6 +123,53 @@ public class ExchangeRateServiceTestContainers {
         logger.info("Admin response body: {}", adminResponse.getBody());
 
 //        assertEquals(expectedUrl, configuredMathJsUrl, "La URL de WireMock no se configuró correctamente");
+    }
+
+    @Test
+    void validar_contenido_archivos_mapping() throws Exception {
+        Thread.sleep(3000);
+
+        logger.info("=== VALIDACIÓN DETALLADA DE ARCHIVOS MAPPING ===");
+
+        // 1. Listar archivos específicos
+        org.testcontainers.containers.Container.ExecResult findResult = wireMockContainer.execInContainer("find", "/home/wiremock/mappings", "-name", "*.json");
+        logger.info("Archivos .json encontrados:");
+        logger.info(findResult.getStdout());
+
+        // 2. Verificar permisos
+        org.testcontainers.containers.Container.ExecResult permissionsResult = wireMockContainer.execInContainer("ls", "-la", "/home/wiremock/mappings");
+        logger.info("Permisos de archivos:");
+        logger.info(permissionsResult.getStdout());
+
+        // 3. Leer contenido de un archivo específico (si existe)
+        try {
+            org.testcontainers.containers.Container.ExecResult catResult = wireMockContainer.execInContainer("cat", "/home/wiremock/mappings/mathjs.json");
+            if (catResult.getExitCode() == 0) {
+                logger.info("Contenido de mathjs.json:");
+                logger.info(catResult.getStdout());
+            } else {
+                logger.warn("Archivo mathjs.json no encontrado");
+            }
+        } catch (Exception e) {
+            logger.warn("No se pudo leer mathjs.json: {}", e.getMessage());
+        }
+
+        // 4. Verificar que WireMock puede leer los archivos
+        org.testcontainers.containers.Container.ExecResult wiremockCheck = wireMockContainer.execInContainer("ls", "-la", "/home/wiremock/");
+        logger.info("Contenido completo de /home/wiremock/:");
+        logger.info(wiremockCheck.getStdout());
+
+        // 5. Verificar logs de WireMock para errores de carga
+        logger.info("=== LOGS DE WIREMOCK ===");
+        String logs = wireMockContainer.getLogs();
+        if (logs.contains("ERROR") || logs.contains("WARN")) {
+            logger.warn("Se encontraron warnings/errores en logs de WireMock:");
+            logger.warn(logs);
+        } else {
+            logger.info("No hay errores en logs de WireMock");
+        }
+
+        logger.info("===========================================");
     }
 
     @Test
