@@ -17,9 +17,7 @@ pipeline {
    //     cron('H/5 * * * *')
    // }
     environment {
-        PROJECT_NAME = "${BUILD_TAG}"
         CUSTOM_NETWORK = "${BUILD_TAG}_default"
-        TESTCONTAINERS_NETWORK_NAME = "${BUILD_TAG}_default"
         DOCKER_HOST = "unix:///var/run/docker.sock"
         TESTCONTAINERS_RYUK_DISABLED = true
     }
@@ -31,6 +29,9 @@ pipeline {
 
                 sh '''
                     env | sort
+
+                    docker --version && docker compose version
+                    docker system df
 
                     docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
 
