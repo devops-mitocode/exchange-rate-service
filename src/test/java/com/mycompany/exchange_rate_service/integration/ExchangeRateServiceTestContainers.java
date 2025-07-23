@@ -17,6 +17,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -35,8 +36,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Testcontainers
 public class ExchangeRateServiceTestContainers {
 
-//    @Value("${TESTCONTAINERS_NETWORK_NAME:}")
-//    private String networkName;
+    static Network externalNetwork = Network.builder()
+
+            .name(System.getenv("TESTCONTAINERS_NETWORK_NAME"))  // Nombre de la red existente
+            .build();
 
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
@@ -52,6 +55,7 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
 //            .withNetworkMode(resolveNetworkName())
+            .withNetworkAliases("postgres")
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
@@ -65,6 +69,7 @@ public class ExchangeRateServiceTestContainers {
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
 //            .withNetworkMode(resolveNetworkName())
+            .withNetworkAliases("wiremock")
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)

@@ -41,6 +41,7 @@ pipeline {
                     docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
 
                     mvn clean verify \
+                        -Dspring.profiles.active=compose-ci \
                         -Dit.test=ExchangeRateServiceTestContainers \
                         -Dstyle.color=always \
                         -B -ntp
