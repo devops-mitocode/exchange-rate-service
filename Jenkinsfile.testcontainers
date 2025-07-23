@@ -1,14 +1,7 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'Dockerfile.testcontainers'
-            dir '.'
-            args '''
-                -v /var/run/docker.sock:/var/run/docker.sock
-                -u root:root
-                --network ${BUILD_TAG}
-            '''
-        }
+    agent none
+    environment {
+        CUSTOM_NETWORK = "${BUILD_TAG}_default"
     }
     options {
        timeout(time: 10, unit: 'MINUTES')
@@ -17,6 +10,7 @@ pipeline {
    // triggers {
    //     cron('H/5 * * * *')
    // }
+   /*
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
         CUSTOM_NETWORK = "${BUILD_TAG}_default"
@@ -24,17 +18,26 @@ pipeline {
         DOCKER_HOST = "unix:///var/run/docker.sock"
         TESTCONTAINERS_RYUK_DISABLED = true
     }
+    */
     stages {
        stage('Integration Test') {
+            agent {
+                dockerfile {
+                    filename 'Dockerfile.testcontainers'
+                    dir '.'
+                    args '''
+                        -v /var/run/docker.sock:/var/run/docker.sock
+                        -u root:root
+                        --network ${CUSTOM_NETWORK}
+                    '''
+                }
+            }
            steps {
                 sh '''
 
 
                     docker network ls
                 '''
-                script {
-                    env.TESTCONTAINERS_NETWORK_NAME = env.CUSTOM_NETWORK
-                }
 
                 sh '''
                     env | sort
