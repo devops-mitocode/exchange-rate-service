@@ -101,13 +101,17 @@ public class ExchangeRateServiceTestContainers {
         Thread.sleep(5000);
 
         int dynamicPort = wireMockContainer.getMappedPort(8080);
-        String expectedUrl = "http://localhost:" + dynamicPort + "/v4/";
 
-        logger.info("=== VERIFICACIÓN DE WIREMOCK ===");
+        logger.info("=== VALIDACIÓN DE WIREMOCK ===");
         logger.info("Puerto dinámico asignado: {}", dynamicPort);
-        logger.info("URL esperada: {}", expectedUrl);
-//        logger.info("URL configurada en Spring: {}", configuredMathJsUrl);
         logger.info("Container está ejecutándose: {}", wireMockContainer.isRunning());
+
+        // URLs para validar
+        String adminUrl = "http://localhost:" + dynamicPort + "/__admin/mappings";
+        String mathJsUrl = "http://localhost:" + dynamicPort + "/v4/?expr=1+1";
+
+        logger.info("URL Admin: {}", adminUrl);
+        logger.info("URL MathJS test: {}", mathJsUrl);
         logger.info("Container logs: {}", wireMockContainer.getLogs());
         logger.info("====================================");
 
