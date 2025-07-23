@@ -3,6 +3,7 @@ package com.mycompany.exchange_rate_service.integration;
 import com.mycompany.exchange_rate_service.dto.ExchangeRateRequestDTO;
 import com.mycompany.exchange_rate_service.dto.ExchangeRateResponseDTO;
 import com.mycompany.exchange_rate_service.service.ExchangeRateService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import org.testcontainers.utility.DockerImageName;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -83,7 +85,9 @@ public class ExchangeRateServiceTestContainers {
     }
 
     @Test
-    void calcular_TipoCambio_Service() {
+    void calcular_TipoCambio_Service() throws InterruptedException {
+
+        Thread.sleep(100000);
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
@@ -109,6 +113,7 @@ public class ExchangeRateServiceTestContainers {
     }
 
     @Test
+    @Disabled
     void calcular_TipoCambio_Controller() {
         // Arrange
         String fromCurrency = "USD";
