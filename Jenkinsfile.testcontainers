@@ -6,7 +6,7 @@ pipeline {
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -u root:root
-                --network ${CUSTOM_NETWORK}
+                --network ${BUILD_TAG}
             '''
         }
     }
@@ -28,7 +28,7 @@ pipeline {
        stage('Integration Test') {
            steps {
                 sh '''
-                    
+
 
                     docker network ls
                 '''
