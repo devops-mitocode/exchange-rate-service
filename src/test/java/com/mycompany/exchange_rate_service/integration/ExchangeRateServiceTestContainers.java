@@ -115,6 +115,11 @@ public class ExchangeRateServiceTestContainers {
         logger.info("Container logs: {}", wireMockContainer.getLogs());
         logger.info("====================================");
 
+        logger.info("=== PROBANDO ADMIN ENDPOINT ===");
+        ResponseEntity<String> adminResponse = restTemplate.getForEntity(adminUrl, String.class);
+        logger.info("Admin response status: {}", adminResponse.getStatusCode());
+        logger.info("Admin response body: {}", adminResponse.getBody());
+
 //        assertEquals(expectedUrl, configuredMathJsUrl, "La URL de WireMock no se configuró correctamente");
     }
 
