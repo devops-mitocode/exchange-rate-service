@@ -7,7 +7,6 @@ pipeline {
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -u root:root
             '''
-            label 'testcontainers-agent'
         }
     }
     options {
