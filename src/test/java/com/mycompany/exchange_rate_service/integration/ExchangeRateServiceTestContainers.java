@@ -143,7 +143,7 @@ public class ExchangeRateServiceTestContainers {
 
         // 3. Leer contenido de un archivo específico (si existe)
         try {
-            org.testcontainers.containers.Container.ExecResult catResult = wireMockContainer.execInContainer("cat", "/home/wiremock/mappings/mathjs.json");
+            org.testcontainers.containers.Container.ExecResult catResult = wireMockContainer.execInContainer("cat", "/home/wiremock/mappings/mathjs-mappings.json");
             if (catResult.getExitCode() == 0) {
                 logger.info("Contenido de mathjs.json:");
                 logger.info(catResult.getStdout());
