@@ -53,9 +53,13 @@ public class ExchangeRateServiceTestContainers {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    static Network jenkinsNetwork = Network.builder()
+            .createNetworkCmdModifier(cmd -> cmd.withName(System.getenv("CUSTOM_NETWORK")))
+            .build();
+
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withNetworkMode(System.getenv("CUSTOM_NETWORK"))
+            .withNetwork(jenkinsNetwork)
             .withNetworkAliases("postgres")
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
@@ -69,7 +73,7 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
-            .withNetworkMode(System.getenv("CUSTOM_NETWORK"))
+            .withNetwork(jenkinsNetwork)
             .withNetworkAliases("wiremock")
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
