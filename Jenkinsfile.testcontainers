@@ -6,7 +6,6 @@ pipeline {
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -u root:root
-                --network ${CUSTOM_NETWORK}
             '''
         }
     }
@@ -31,14 +30,8 @@ pipeline {
 
            steps {
                 sh '''
-
-
                     docker network ls
-
-                    # Crear red personalizada
                     docker network create ${CUSTOM_NETWORK}
-
-                    # Desconectar de bridge y conectar a la red personalizada
                     docker network disconnect bridge $(hostname)
                     docker network connect ${CUSTOM_NETWORK} $(hostname)
                 '''
