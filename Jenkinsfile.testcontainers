@@ -20,6 +20,8 @@ pipeline {
         PROJECT_NAME = "${BUILD_TAG}"
         CUSTOM_NETWORK = "${BUILD_TAG}_network"
         TESTCONTAINERS_NETWORK_NAME = "${BUILD_TAG}_default"
+        DOCKER_HOST = unix:///var/run/docker.sock
+        TESTCONTAINERS_RYUK_DISABLED = true
     }
     stages {
        stage('Integration Test') {
