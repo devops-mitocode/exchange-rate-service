@@ -33,8 +33,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Testcontainers
 public class ExchangeRateServiceTestContainers {
 
-    @Value("${TESTCONTAINERS_NETWORK_NAME:}")
-    private String networkName;
+//    @Value("${TESTCONTAINERS_NETWORK_NAME:}")
+//    private String networkName;
 
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
@@ -49,7 +49,7 @@ public class ExchangeRateServiceTestContainers {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-//            .withNetworkMode(networkName)
+            .withNetworkMode(resolveNetworkName())
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
@@ -62,7 +62,7 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
-//            .withNetworkMode(networkName)
+            .withNetworkMode(resolveNetworkName())
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)
@@ -76,6 +76,10 @@ public class ExchangeRateServiceTestContainers {
 
         registry.add("mathjs.api.url", () ->
                 "http://localhost:" + wireMockContainer.getMappedPort(8080) + "/v4/");
+    }
+
+    private static String resolveNetworkName() {
+        return System.getenv("TESTCONTAINERS_NETWORK_NAME");
     }
 
     @Test
