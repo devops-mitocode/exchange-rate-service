@@ -39,6 +39,7 @@ pipeline {
                 }
 
                 sh '''
+                    env | sort
 
                     mvn clean verify \
                         -Dit.test=ExchangeRateServiceTestContainers \
