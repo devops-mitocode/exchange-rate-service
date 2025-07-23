@@ -21,20 +21,17 @@ pipeline {
                     docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} ps
 
                     docker network ls
-
-                    MAVEN_CONTAINER_ID=$(docker compose ps -q maven)
-                    MAVEN_NETWORK=$(docker inspect $MAVEN_CONTAINER_ID --format='{{range $key, $value := .NetworkSettings.Networks}}{{$key}}{{end}}')
-
-                    echo "Maven Container ID: $MAVEN_CONTAINER_ID"
-                    echo "Maven Network: $MAVEN_NETWORK"
-
                 '''
            }
        }
        stage('Integration Test') {
            steps {
                 sh '''
-                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} exec -T maven mvn --version
+                    docker compose -f compose-testcontainers.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
+                        -Dspring.profiles.active=compose-ci \
+                        -Dit.test=ExchangeRateServiceTestContainers \
+                        -Dstyle.color=always \
+                        -B -ntp
                 '''
            }
        }
