@@ -1,0 +1,13 @@
+services:
+  maven:
+    image: maven:3.9.6-eclipse-temurin-17
+    command: cat
+    tty: true
+    volumes:
+      - ${WORKSPACE}:${WORKSPACE}
+    working_dir: ${WORKSPACE}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      wiremock:
+        condition: service_started
