@@ -23,7 +23,23 @@ pipeline {
     stages {
        stage('Integration Test') {
            steps {
+
+                sh 'env | sort'
+
+                script {
+                    def networkName = sh(
+                    script: '''
+                        CONTAINER_ID=$(hostname)
+                        docker inspect $CONTAINER_ID --format='{{range $net, $conf := .NetworkSettings.Networks}}{{$net}}{{end}}'
+                    ''',
+                    returnStdout: true
+                    ).trim()
+
+                    env.TESTCONTAINERS_NETWORK_NAME = networkName
+                }
+
                 sh '''
+
                     mvn clean verify \
                         -Dit.test=ExchangeRateServiceTestContainers \
                         -Dstyle.color=always \
