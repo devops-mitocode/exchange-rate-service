@@ -36,10 +36,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Testcontainers
 public class ExchangeRateServiceTestContainers {
 
-    static Network externalNetwork = Network.builder()
-
-            .name(System.getenv("TESTCONTAINERS_NETWORK_NAME"))  // Nombre de la red existente
-            .build();
+//    static Network externalNetwork = Network.builder()
+//
+//            .name(System.getenv("TESTCONTAINERS_NETWORK_NAME"))  // Nombre de la red existente
+//            .build();
 
     private static final String POSTGRES_IMAGE = "postgres:16.9";
     private static final String DATABASE_NAME = "petclinic";
