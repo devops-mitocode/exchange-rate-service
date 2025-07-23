@@ -24,13 +24,13 @@ pipeline {
     stages {
        stage('Integration Test') {
            steps {
+                sh '''
+                    docker network create ${CUSTOM_NETWORK}
 
-                docker network create ${CUSTOM_NETWORK}
+                    docker network connect ${CUSTOM_NETWORK} $(hostname)
 
-                docker network connect ${CUSTOM_NETWORK} $(hostname)
-
-                docker network ls
-
+                    docker network ls
+                '''
                 script {
                     env.TESTCONTAINERS_NETWORK_NAME = env.CUSTOM_NETWORK
                 }
