@@ -40,7 +40,6 @@ pipeline {
                     mvn clean verify \
                         -Dspring.profiles.active=test \
                         -Dit.test=ExchangeRateServiceTestContainers \
-                        -Dryuk.disabled=true \
                         -Dstyle.color=always \
                         -B -ntp
                 '''
