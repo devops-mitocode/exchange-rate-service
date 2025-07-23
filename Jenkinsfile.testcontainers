@@ -32,6 +32,8 @@ pipeline {
 
                     docker --version && docker compose version
                     docker system df
+                    docker network ls
+                    docker images
 
                     docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
 
