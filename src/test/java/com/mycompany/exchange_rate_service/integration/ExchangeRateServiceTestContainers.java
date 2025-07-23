@@ -43,9 +43,9 @@ public class ExchangeRateServiceTestContainers {
 //            .build();
 
     private static final String POSTGRES_IMAGE = "postgres:16.9";
-    private static final String DATABASE_NAME = "petclinic";
-    private static final String DATABASE_USER = "petclinic";
-    private static final String DATABASE_PASSWORD = "petclinic";
+    private static final String DATABASE_NAME = "exchange_rate_db";
+    private static final String DATABASE_USER = "postgres";
+    private static final String DATABASE_PASSWORD = "postgres";
 
     @Autowired
     private ExchangeRateService exchangeRateService;
@@ -99,6 +99,20 @@ public class ExchangeRateServiceTestContainers {
 //            .withExposedService("wiremock", 8080)
 //            .withStartupTimeout(Duration.ofMinutes(5));
 
+
+    @Test
+    void debugContainerInfo() {
+        System.out.println("=== INFORMACIÓN DE CONTENEDORES ===");
+        System.out.println("PostgreSQL:");
+        System.out.println("  Host: " + postgres.getHost());
+        System.out.println("  Puerto: " + postgres.getMappedPort(5432));
+        System.out.println("  JDBC URL: " + postgres.getJdbcUrl());
+
+        System.out.println("WireMock:");
+        System.out.println("  Host: " + wireMockContainer.getHost());
+        System.out.println("  Puerto: " + wireMockContainer.getMappedPort(8080));
+        System.out.println("  URL: http://" + wireMockContainer.getHost() + ":" + wireMockContainer.getMappedPort(8080));
+    }
 
     @Test
     @Disabled
