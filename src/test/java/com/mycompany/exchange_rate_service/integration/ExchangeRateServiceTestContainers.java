@@ -51,7 +51,7 @@ public class ExchangeRateServiceTestContainers {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withNetworkMode(resolveNetworkName())
+//            .withNetworkMode(resolveNetworkName())
             .withDatabaseName(DATABASE_NAME)
             .withUsername(DATABASE_USER)
             .withPassword(DATABASE_PASSWORD)
@@ -64,7 +64,7 @@ public class ExchangeRateServiceTestContainers {
     @Container
     static GenericContainer<?> wireMockContainer = new GenericContainer<>(
             DockerImageName.parse("wiremock/wiremock:3.13.1"))
-            .withNetworkMode(resolveNetworkName())
+//            .withNetworkMode(resolveNetworkName())
             .withFileSystemBind("src/main/resources/wiremock/mappings",
                     "/home/wiremock/mappings", BindMode.READ_ONLY)
             .withExposedPorts(8080)
