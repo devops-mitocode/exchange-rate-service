@@ -200,7 +200,8 @@ public class ExchangeRateServiceTestContainers {
     }
 
     @Test
-    void calcular_TipoCambio_Controller() {
+    void calcular_TipoCambio_Controller() throws InterruptedException {
+        Thread.sleep(500000);
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
