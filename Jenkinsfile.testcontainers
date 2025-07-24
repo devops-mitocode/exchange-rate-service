@@ -3,6 +3,7 @@ pipeline {
         dockerfile {
             filename 'Dockerfile.testcontainers'
             dir '.'
+            additionalBuildArgs '--tag my-custom-image:latest'
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -u root:root
