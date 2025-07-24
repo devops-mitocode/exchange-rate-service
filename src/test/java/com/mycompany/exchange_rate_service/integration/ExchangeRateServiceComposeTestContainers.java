@@ -44,7 +44,7 @@ public class ExchangeRateServiceComposeTestContainers {
 
 
     @Container
-    static ComposeContainer environment = new ComposeContainer(new File("docker-compose.yaml"))
+    static ComposeContainer environment = new ComposeContainer(new File("compose.yaml"))
             .withExposedService(POSTGRES_SERVICE, POSTGRES_PORT)
             .withExposedService(WIREMOCK_SERVICE, WIREMOCK_PORT)
             .withStartupTimeout(Duration.ofMinutes(5));
