@@ -1,15 +1,5 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'Dockerfile.testcontainers'
-            dir '.'
-            args '''
-                -v /var/run/docker.sock:/var/run/docker.sock
-                -u root:root
-                --network none
-            '''
-        }
-    }
+    agent any
     options {
        timeout(time: 10, unit: 'MINUTES')
        ansiColor('xterm')
@@ -18,44 +8,48 @@ pipeline {
    //     cron('H/5 * * * *')
    // }
     environment {
-        CUSTOM_NETWORK = "${BUILD_TAG}_default"
-    //    DOCKER_HOST = "unix:///var/run/docker.sock"
-        // TESTCONTAINERS_RYUK_DISABLED = true
-        DB_HOST = 'host.docker.internal'
-        MATH_HOST = 'host.docker.internal'
-        MATH_PORT = '8080'
+        PROJECT_NAME = "${BUILD_TAG}"
+        DOCKER_COMPOSE_ENABLED = false
     }
     stages {
-       stage('Integration Test') {
-
+       stage('Setup') {
            steps {
-
-
                 sh '''
-                    env | sort
-
                     docker --version && docker compose version
                     docker system df
-                    docker network ls
-                    docker images
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} pull --quiet
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} up -d
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} ps
 
                     docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
-
-                    mvn clean verify \
-                        -Dspring.profiles.active=compose \
-                        -Dit.test=ExchangeRateServiceCompose \
-                        -Dstyle.color=always \
-                        -B -ntp
                 '''
            }
        }
-    }
-    post {
-        always {
-            sh '''
-                docker image prune -f
-                docker system df
-            '''
+       stage('Integration Test') {
+           steps {
+                sh '''
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} exec -T maven mvn clean verify \
+                       -Dspring.profiles.active=compose-ci \
+                       -Dit.test=ExchangeRateServiceCompose \
+                       -Dstyle.color=always \
+                       -B -ntp
+                '''
+           }
+           post {
+               always {
+                   junit 'target/failsafe-reports/*.xml'
+               }
+           }
+       }
+        stage('Cleanup') {
+            steps {
+                sh '''
+                    docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} down --rmi all --volumes --remove-orphans
+                    docker builder prune -af
+                    docker system df
+                '''
+                cleanWs()
+            }
         }
     }
 }
