@@ -3,7 +3,6 @@ package com.mycompany.exchange_rate_service.integration;
 import com.mycompany.exchange_rate_service.dto.ExchangeRateRequestDTO;
 import com.mycompany.exchange_rate_service.dto.ExchangeRateResponseDTO;
 import com.mycompany.exchange_rate_service.service.ExchangeRateService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,7 +67,6 @@ public class ExchangeRateServiceTestContainersIndividual {
     }
 
     @Test
-    @Disabled
     void debugContainerInfo() {
         System.out.println("=== INFORMACIÓN DE CONTENEDORES ===");
 
