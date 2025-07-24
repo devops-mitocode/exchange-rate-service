@@ -18,7 +18,7 @@ pipeline {
    // }
     stages {
        stage('Integration Test') {
-           steps {
+            steps {
                 sh '''
                     env | sort
 
@@ -33,12 +33,12 @@ pipeline {
                         -Dstyle.color=always \
                         -B -ntp
                 '''
-           }
-       }
-       post {
-           always {
-               junit 'target/failsafe-reports/*.xml'
-           }
+            }
+            post {
+                always {
+                    junit 'target/failsafe-reports/*.xml'
+                }
+            }
        }
     }
     post {
