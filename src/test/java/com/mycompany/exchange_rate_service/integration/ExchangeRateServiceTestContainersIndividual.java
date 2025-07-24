@@ -39,10 +39,6 @@ public class ExchangeRateServiceTestContainersIndividual {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    static Network jenkinsNetwork = Network.builder()
-            .createNetworkCmdModifier(cmd -> cmd.withName(System.getenv("CUSTOM_NETWORK")))
-            .build();
-
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
             .withFileSystemBind("src/main/resources/schema.sql",

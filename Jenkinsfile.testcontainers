@@ -16,17 +16,9 @@ pipeline {
    // triggers {
    //     cron('H/5 * * * *')
    // }
-    environment {
-        CUSTOM_NETWORK = "${BUILD_TAG}_default"
-    //    DOCKER_HOST = "unix:///var/run/docker.sock"
-        // TESTCONTAINERS_RYUK_DISABLED = true
-    }
     stages {
        stage('Integration Test') {
-
            steps {
-
-
                 sh '''
                     env | sort
 
@@ -35,14 +27,17 @@ pipeline {
                     docker network ls
                     docker images
 
-                    docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
-
                     mvn clean verify \
                         -Dspring.profiles.active=test \
                         -Dit.test=ExchangeRateServiceTestContainersIndividual \
                         -Dstyle.color=always \
                         -B -ntp
                 '''
+           }
+       }
+       post {
+           always {
+               junit 'target/failsafe-reports/*.xml'
            }
        }
     }
