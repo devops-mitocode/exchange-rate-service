@@ -39,7 +39,7 @@ pipeline {
 
                     mvn clean verify \
                         -Dspring.profiles.active=test \
-                        -Dit.test=ExchangeRateServiceTestContainers \
+                        -Dit.test=ExchangeRateServiceTestContainersIndividual \
                         -Dstyle.color=always \
                         -B -ntp
                 '''
