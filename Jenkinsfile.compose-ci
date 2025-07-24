@@ -9,7 +9,7 @@ pipeline {
    // }
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
-        DOCKER_COMPOSE_ENABLED=true
+        DOCKER_COMPOSE_ENABLED=false
     }
     stages {
        stage('Setup') {
