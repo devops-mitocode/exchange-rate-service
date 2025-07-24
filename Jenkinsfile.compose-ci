@@ -1,0 +1,57 @@
+pipeline {
+    agent {
+        dockerfile {
+            filename 'Dockerfile.testcontainers'
+            dir '.'
+            args '''
+                -v /var/run/docker.sock:/var/run/docker.sock
+                -u root:root
+            '''
+        }
+    }
+    options {
+       timeout(time: 10, unit: 'MINUTES')
+       ansiColor('xterm')
+    }
+   // triggers {
+   //     cron('H/5 * * * *')
+   // }
+    environment {
+        CUSTOM_NETWORK = "${BUILD_TAG}_default"
+    //    DOCKER_HOST = "unix:///var/run/docker.sock"
+        // TESTCONTAINERS_RYUK_DISABLED = true
+    }
+    stages {
+       stage('Integration Test') {
+
+           steps {
+
+
+                sh '''
+                    env | sort
+
+                    docker --version && docker compose version
+                    docker system df
+                    docker network ls
+                    docker images
+
+                    docker ps -q | xargs -I {} docker inspect --format 'Nombre: {{.Name}} Hostname: {{.Config.Hostname}} IP: {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
+
+                    mvn clean verify \
+                        -Dspring.profiles.active=compose \
+                        -Dit.test=ExchangeRateServiceCompose \
+                        -Dstyle.color=always \
+                        -B -ntp
+                '''
+           }
+       }
+    }
+    post {
+        always {
+            sh '''
+                docker image prune -f
+                docker system df
+            '''
+        }
+    }
+}
