@@ -66,6 +66,7 @@ public class ExchangeRateServiceTestContainersCompose {
     }
 
     @Test
+    @Disabled
     void debugContainerInfo() {
         System.out.println("=== INFORMACIÓN DE CONTENEDORES ===");
 
@@ -87,8 +88,7 @@ public class ExchangeRateServiceTestContainersCompose {
     }
 
     @Test
-    @Disabled
-    void calcular_TipoCambio_Service() throws InterruptedException {
+    void calcular_TipoCambio_Service() {
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
@@ -114,8 +114,7 @@ public class ExchangeRateServiceTestContainersCompose {
     }
 
     @Test
-    void calcular_TipoCambio_Controller() throws InterruptedException {
-//        Thread.sleep(500000);
+    void calcular_TipoCambio_Controller() {
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
