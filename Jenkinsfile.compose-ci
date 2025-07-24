@@ -9,12 +9,13 @@ pipeline {
    // }
     environment {
         PROJECT_NAME = "${BUILD_TAG}"
-        DOCKER_COMPOSE_ENABLED = false
+        DOCKER_COMPOSE_ENABLED = 'false'
     }
     stages {
        stage('Setup') {
            steps {
                 sh '''
+                    env | sort
                     docker --version && docker compose version
                     docker system df
                     docker compose -f compose-ci.yaml --project-name ${PROJECT_NAME} pull --quiet
