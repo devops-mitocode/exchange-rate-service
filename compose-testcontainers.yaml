@@ -1,9 +1,0 @@
-services:
-  maven:
-    image: maven:3.9.6-eclipse-temurin-17
-    command: cat
-    tty: true
-    volumes:
-      - ${WORKSPACE}:${WORKSPACE}
-      - /var/run/docker.sock:/var/run/docker.sock
-    working_dir: ${WORKSPACE}
