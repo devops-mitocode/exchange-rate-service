@@ -5,8 +5,6 @@ import com.mycompany.exchange_rate_service.dto.ExchangeRateResponseDTO;
 import com.mycompany.exchange_rate_service.service.ExchangeRateService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -29,7 +27,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
-public class ExchangeRateServiceComposeTestContainers {
+public class ExchangeRateServiceTestContainersCompose {
 
     private static final String POSTGRES_SERVICE = "postgres";
     private static final String WIREMOCK_SERVICE = "wiremock";
