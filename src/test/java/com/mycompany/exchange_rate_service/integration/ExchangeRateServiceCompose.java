@@ -54,8 +54,7 @@ public class ExchangeRateServiceCompose {
     }
 
     @Test
-    void calcular_TipoCambio_Controller() throws InterruptedException {
-        Thread.sleep(500000);
+    void calcular_TipoCambio_Controller() {
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
