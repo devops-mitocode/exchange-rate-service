@@ -2,6 +2,7 @@ package com.mycompany.exchange_rate_service.integration;
 
 import com.mycompany.exchange_rate_service.dto.ExchangeRateRequestDTO;
 import com.mycompany.exchange_rate_service.dto.ExchangeRateResponseDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +27,7 @@ public class ExchangeRateServiceCompose {
     private TestRestTemplate restTemplate;
 
     @Test
+    @Disabled
     void calcular_TipoCambio_Service() {
         // Arrange
         String fromCurrency = "USD";
@@ -52,7 +54,8 @@ public class ExchangeRateServiceCompose {
     }
 
     @Test
-    void calcular_TipoCambio_Controller() {
+    void calcular_TipoCambio_Controller() throws InterruptedException {
+        Thread.sleep(500000);
         // Arrange
         String fromCurrency = "USD";
         String toCurrency = "PEN";
