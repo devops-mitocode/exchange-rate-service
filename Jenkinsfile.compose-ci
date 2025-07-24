@@ -20,6 +20,9 @@ pipeline {
         CUSTOM_NETWORK = "${BUILD_TAG}_default"
     //    DOCKER_HOST = "unix:///var/run/docker.sock"
         // TESTCONTAINERS_RYUK_DISABLED = true
+        DB_HOST = 'postgres'
+        MATH_HOST = 'wiremock'
+        MATH_PORT = '8080'
     }
     stages {
        stage('Integration Test') {
